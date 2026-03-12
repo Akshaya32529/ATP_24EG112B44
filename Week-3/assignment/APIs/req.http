@@ -1,0 +1,37 @@
+### Create Product
+POST http://localhost:2000/product-api/products
+Content-Type: application/json
+
+{
+  "productId":101,
+  "productName":"Laptop",
+  "price":35000,
+  "brand":"Dell"
+}
+
+###
+
+### Get All Products
+GET http://localhost:2000/product-api/products
+
+###
+
+### Get Product By Mongo ID
+GET http://localhost:2000/product-api/products/69b215192ed8d054c40e4e36
+
+###
+
+### Update Product
+PUT http://localhost:2000/product-api/products/69b215192ed8d054c40e4e36
+Content-Type: application/json
+
+{
+  "productName":"Gaming Laptop",
+  "price":45000,
+  "brand":"HP"
+}
+
+###
+
+### Delete Product
+DELETE http://localhost:2000/product-api/products/69b215192ed8d054c40e4e36
