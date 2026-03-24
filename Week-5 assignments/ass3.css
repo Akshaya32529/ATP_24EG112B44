@@ -1,0 +1,41 @@
+body {
+  margin: 0;
+  font-family: Arial;
+}
+.top {
+  background-color: #e6e6e6;
+  padding: 40px;
+}
+.top h1 {
+  font-size: 40px;
+}
+.top p {
+  width: 60%;
+}
+op button {
+  padding: 8px 15px;
+  background-color: blue;
+  color: white;
+  border: none;
+}
+.row {
+  display: flex;              
+  justify-content: space-around;
+  margin: 30px;
+}
+.box {
+  width: 30%;
+  padding:20px;
+}
+.box button {
+  background-color: gray;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+}
+
+/* Footer */
+.footer {
+  margin: 30px;
+  color: gray;
+}

@@ -1,0 +1,97 @@
+ body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #fdfdfd;
+  color: #333;
+}
+header {
+   position: relative;
+  background-color: white;
+  padding: 15px 30px;
+  color: black;
+}
+.header-content {
+  display:flex;
+  align-items: center;
+}
+.intro{
+    background-color: lightskyblue;
+}
+.intro img {
+  width: 100px;
+  height: auto;
+  margin-right: 30px;
+  border-radius: 100%;
+}
+.title h1 {
+  margin: 0;
+  font-size: 28px;
+   
+}
+
+.title p {
+   position: absolute;
+    top:10px;
+    right:20px;
+  margin: 5px 0 0;
+  font-size: 14px;
+  font-weight: bold;
+   display:flex;
+   gap:35px;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 10px 20px;
+    color: lightskyblue;
+}
+intro{}
+.intro {
+  text-align: center;
+  padding: 30px 20px;
+}
+
+.intro h2 {
+  margin: 0;
+  font-size: 32px;
+  color: black;
+}
+
+.intro p {
+  font-size: 18px;
+  margin-top: 10px;
+}
+
+.bottom-section {
+  display: flex;
+  flex-direction: row; /* rowflex */
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.column {
+  flex: 1;
+  margin: 0 10px;
+  background-color: white;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.column h3 {
+  margin-top: 0;
+  color: black;
+}
+
+.food-images {
+  display: grid;
+  grid-template-columns: repeat(2,1fr) ;
+  gap:10px;
+  justify-content: space-around;
+  margin: 15px 0;
+  padding: 30px;
+  background-color: lightskyblue;
+}
+
+.food-images img {
+  width: 50%;
+  height: auto;
+  border-radius: 5px;
+}

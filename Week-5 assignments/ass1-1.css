@@ -1,0 +1,28 @@
+table{
+    margin:auto;
+    padding: 100;
+    text-align: center;
+    width: 500px;
+    border: 5px solid black;
+}
+table,th,td{
+   border: 1px solid black;
+    padding:10px;
+    border-collapse: collapse;
+
+}
+body{
+    padding-top:200px;
+}
+/*table{
+    text-align: center;
+    margin:auto;
+    padding:100px;
+    width:400px;
+    border:3px solid black;
+}
+table,th,td{
+    border:1px solid black;
+    padding:10px;
+    border-collapse: collapse;
+}*/
