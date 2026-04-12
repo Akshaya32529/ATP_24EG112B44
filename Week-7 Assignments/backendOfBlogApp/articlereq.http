@@ -1,0 +1,38 @@
+###create new article
+POST http://localhost:4000/author-api/article
+Content-Type: application/json
+
+{
+    "author": "69b3c6ffc4859872cf786d4d",
+    "title": "Article-1 by author 1",
+    "category": "programming",
+    "content": "test article on programming"
+}
+
+###read own article
+
+GET http://localhost:4000/author-api/articles
+
+{
+    "authorIdofToken": "69b3cddd4392daec48f5143"
+}
+
+###update article by author
+PUT http://localhost:4000/author-api/articles
+Content-Type: application/json
+
+{
+    " articleId": "69b3cddd4392daec48f5143",
+    "title": "Article 2 by Author 1",
+    "category": "AI",
+    "content": "test article on AI and its updated"
+}
+###delete article
+
+PATCH http://localhost:4000/author-api/articles
+Content-Type: application/json
+
+{
+    "articleId":"69b3cddd4392daec48f51439",
+    "isArticleActive":true
+}
