@@ -18,11 +18,16 @@ app.use(cookieParser())
 //body paser middleware
 app.use(exp.json())
 
-app.use(cors({
-  origin:["http://localhost:5173","https://atp-24-eg-112-b44.vercel.app",],
-  credentials:true
-}))
-
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://atp-24-eg-112-b44.vercel.app"
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true
+  })
+);
 app.use("/user", userApp)
 app.use("/author", authorApp)
 app.use("/admin", adminApp)
