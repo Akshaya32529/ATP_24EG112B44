@@ -1,6 +1,8 @@
 import exp from 'express'
 import dotenv from 'dotenv'
 dotenv.config()
+import dns from 'dns'
+dns.setDefaultResultOrder('ipv4first')
 import { connect } from 'mongoose'
 import { userApp } from './APIs/userAPI.js'
 import { authorApp } from './APIs/authorAPI.js'
