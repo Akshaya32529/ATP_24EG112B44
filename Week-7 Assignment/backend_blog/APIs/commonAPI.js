@@ -3,127 +3,207 @@ import { UserModel } from '../models/userModel.js'
 import { hash, compare } from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { verifyToken } from '../middlewares/verifyToken.js'
-import { upload } from '../config/multer.js'
+
 const { sign } = jwt
+
 export const commonApp = exp.Router()
-import { uploadToCloudinary } from '../config/cloudinaryUpload.js'
 
-
-
-//in express no need try catch it handles error automatically
+// allowed roles
 let allowedRoles = ["USER", "AUTHOR"]
-//route for register
-commonApp.post("/users", (req, res, next) => {
-    upload.single("profileImageUrl")(req, res, async (err) => {
 
-        if (err) {
-            console.log("Multer error:", err);
-            return res.status(400).json({ message: "File upload error" });
+
+// ================= REGISTER =================
+commonApp.post("/users", async (req, res, next) => {
+    try {
+
+        console.log("REQ BODY:", req.body)
+
+        // get user data
+        const newUser = req.body
+
+        // validate role
+        if (!newUser.role || !allowedRoles.includes(newUser.role.toUpperCase())) {
+            return res.status(400).json({
+                message: "Invalid role"
+            })
         }
+
+        // check existing user
+        const existingUser = await UserModel.findOne({
+            email: newUser.email
+        })
+
+        if (existingUser) {
+            return res.status(400).json({
+                message: "User already exists"
+            })
+        }
+
+        // hash password
+        newUser.password = await hash(newUser.password, 12)
+
+        // uppercase role
+        newUser.role = newUser.role.toUpperCase()
+
+        // create document
+        const newUserDoc = new UserModel(newUser)
+
+        // save
+        await newUserDoc.save()
+
+        // response
+        res.status(201).json({
+            message: "User registered successfully"
+        })
+
+    } catch (err) {
+
+        console.log("Registration Error:", err)
+
+        res.status(500).json({
+            message: "Server Error",
+            error: err.message
+        })
+    }
+})
+
+
+// ================= LOGIN =================
+commonApp.post("/login", async (req, res) => {
+
+    try {
+
+        const { email, password } = req.body
+
+        const user = await UserModel.findOne({ email })
+
+        if (!user) {
+            return res.status(401).json({
+                message: "Invalid email"
+            })
+        }
+
+        if (user.isUserActive === false) {
+            return res.status(403).json({
+                message: "Your account has been blocked by admin"
+            })
+        }
+
+        const isMatched = await compare(password, user.password)
+
+        if (!isMatched) {
+            return res.status(401).json({
+                message: "Invalid password"
+            })
+        }
+
+        const signedToken = sign(
+            {
+                id: user._id,
+                email: user.email,
+                role: user.role,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                profileImageUrl: user.profileImageUrl
+            },
+            process.env.SECRET_KEY,
+            { expiresIn: "1h" }
+        )
+
+        res.cookie("token", signedToken, {
+            httpOnly: true,
+            secure: false,
+            sameSite: "lax",
+            maxAge: 60 * 60 * 1000
+        })
+
+        let userObj = user.toObject()
+
+        delete userObj.password
+
+        res.status(200).json({
+            message: "Login successful",
+            payload: userObj,
+            user: userObj
+        })
+
+    } catch (err) {
+
+        console.log("Login Error:", err)
+
+        res.status(500).json({
+            message: "Server Error",
+            error: err.message
+        })
+    }
+})
+
+
+// ================= LOGOUT =================
+commonApp.get("/logout", async (req, res) => {
+
+    res.clearCookie("token", {
+        httpOnly: true,
+        secure: false,
+        sameSite: "lax"
+    })
+
+    res.status(200).json({
+        message: "Logout successful"
+    })
+})
+
+
+// ================= CHECK AUTH =================
+commonApp.get(
+    "/check-auth",
+    verifyToken("USER", "AUTHOR", "ADMIN"),
+    async (req, res) => {
+
+        res.status(200).json({
+            message: "Authenticated",
+            payload: req.user
+        })
+    }
+)
+
+
+// ================= CHANGE PASSWORD =================
+commonApp.put(
+    "/password",
+    verifyToken("USER", "AUTHOR", "ADMIN"),
+    async (req, res) => {
 
         try {
-            const newUser = req.body;
 
-            console.log("REQ BODY:", req.body);
+            const { currentPassword, newPassword } = req.body
 
-            let allowedRoles = ["USER", "AUTHOR"];
+            const user = await UserModel.findById(req.user?.id)
 
-            if (!newUser.role || !allowedRoles.includes(newUser.role.toUpperCase())) {
-                return res.status(400).json({ message: "Invalid role" });
+            const isMatched = await compare(currentPassword, user.password)
+
+            if (!isMatched) {
+                return res.status(401).json({
+                    message: "Invalid current password"
+                })
             }
 
-            const existingUser = await UserModel.findOne({ email: newUser.email });
+            user.password = await hash(newPassword, 12)
 
-            if (existingUser) {
-                return res.status(400).json({ message: "User already exists" });
-            }
+            await user.save()
 
-            let cloudinaryReslt;
-
-            if (req.file) {
-                cloudinaryReslt = await uploadToCloudinary(req.file.buffer);
-            }
-
-            if (cloudinaryReslt) {
-                newUser.profileImageUrl = cloudinaryReslt.secure_url;
-            }
-
-            newUser.password = await hash(newUser.password, 12);
-
-            newUser.role = newUser.role.toUpperCase();
-
-            const newUserDoc = new UserModel(newUser);
-
-            await newUserDoc.save();
-
-            res.status(201).json({
-                message: "User registered successfully"
-            });
+            res.status(200).json({
+                message: "Password changed successfully"
+            })
 
         } catch (err) {
-            console.log("Registration Error:", err);
-            return res.status(500).json({
-                message: "Server error",
+
+            console.log("Password Change Error:", err)
+
+            res.status(500).json({
+                message: "Server Error",
                 error: err.message
-            });
+            })
         }
-    });
-});
-
-// route for login
-commonApp.post("/login", async (req, res) => {
-    //get user cred obj
-    const { email, password } = req.body
-    //find user bt email
-    const user = await UserModel.findOne({ email: email })
-    //if user not found
-    if (!user) {
-        return res.status(401).json({ message: "Invalid email" })
     }
-    if (user.isUserActive === false) {
-        return res.status(403).json({ message: "Your account has been blocked by the admin." })
-    }
-    //compare password
-    const isMatched = await compare(password, user.password)
-    if (!isMatched) {
-        return res.status(401).json({ message: "Invalid password" })
-    }
-
-
-    //create jwt
-    const signedToken = sign({id:user._id, email: email, role: user.role,firstName:user.firstName,lastName:user.lastName,profileImageUrl:user.profileImageUrl}, process.env.SECRET_KEY,{expiresIn:"1H"})
-
-    //set token in cookie
-    res.cookie("token", signedToken, { httpOnly: true, secure: false, sameSite: "lax",maxAge:60*60*1000 })
-
-    //remove password from user obj
-    let userObj = user.toObject()
-    delete userObj.password
-
-
-    //send 
-    res.status(200).json({ message: "login successfull", payload: userObj, user: userObj })
-})
-
-//route for logout
-commonApp.get("/logout", async (req, res) => {
-    
-    res.clearCookie("token", { httpOnly: true, secure: false, sameSite: "lax" })
-    res.status(200).json({ message: "logout successfull" })
-
-})
-//page refresh check
-commonApp.get("/check-auth",verifyToken("USER","AUTHOR","ADMIN"),async(req,res)=>{
-    res.status(200).json({message:"authenticated",payload:req.user})
-})
-//change password
-commonApp.put("/password",verifyToken("USER","AUTHOR","ADMIN"),async(req,res)=>{
-    const {currentPassword,newPassword}=req.body
-    const user = await UserModel.findById(req.user?.id)
-    if(user.password !== await hash(currentPassword,12)){
-        return res.status(401).json({message:"Invalid current password"})
-    }
-    user.password = await hash(newPassword,12)
-    await user.save()
-    res.status(200).json({message:"Password changed successfully",payload:user})
-})
+)
