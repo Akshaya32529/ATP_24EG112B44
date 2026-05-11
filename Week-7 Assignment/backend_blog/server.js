@@ -22,7 +22,8 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "https://atp-24-eg-112-b44.vercel.app"
+      "https://atp-24-eg-112-b44.vercel.app",
+      "https://atp-24-eg-112-b44-c0a4x087k-akshaya-reddy-vanga-s-projects.vercel.app",
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true
