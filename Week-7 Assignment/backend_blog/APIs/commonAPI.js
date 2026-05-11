@@ -13,48 +13,62 @@ import { uploadToCloudinary } from '../config/cloudinaryUpload.js'
 //in express no need try catch it handles error automatically
 let allowedRoles = ["USER", "AUTHOR"]
 //route for register
-commonApp.post("/users", upload.single("profileImageUrl"), async (req, res, next) => {
-    try {
-        //get user from req
-        const newUser = req.body
+commonApp.post("/users", (req, res, next) => {
+    upload.single("profileImageUrl")(req, res, async (err) => {
 
-        // add profileImageUrl if file is uploaded
-        if (req.file) {
-            // newUser.profileImageUrl = req.file.path; // req.file.path is undefined with memoryStorage
+        if (err) {
+            console.log("Multer error:", err);
+            return res.status(400).json({ message: "File upload error" });
         }
-        //check role
-        if (!newUser.role || !allowedRoles.includes(newUser.role.toUpperCase())) {
-            return res.status(400).json({ message: "Invalid role" })
-        }
-        //check if user already exists
-        const existingUser = await UserModel.findOne({ email: newUser.email })
-        if (existingUser) {
-            return res.status(400).json({ message: "User already exists" })
-        }
-        let cloudinaryReslt;
-        //upload image to cloudinary from memory storage
-        if (req.file) {
-            cloudinaryReslt = await uploadToCloudinary(req.file.buffer)
-        }
-        //add CDN link to the user obj
-        if (cloudinaryReslt) {
-            newUser.profileImageUrl = cloudinaryReslt.secure_url
-        }
-        //hash password and replaace it with plain password
-        newUser.password = await hash(newUser.password, 12)
-        //normalize role to uppercase
-        newUser.role = newUser.role.toUpperCase()
-        const newUserDoc = new UserModel(newUser)
-        //save user
-        await newUserDoc.save()
-        //resend res 
-        res.status(201).json({ message: "User registered successfully" })
-    } catch (err) {
-        console.log("Error in registration:", err);
-        next(err);
-    }
-})
 
+        try {
+            const newUser = req.body;
+
+            console.log("REQ BODY:", req.body);
+
+            let allowedRoles = ["USER", "AUTHOR"];
+
+            if (!newUser.role || !allowedRoles.includes(newUser.role.toUpperCase())) {
+                return res.status(400).json({ message: "Invalid role" });
+            }
+
+            const existingUser = await UserModel.findOne({ email: newUser.email });
+
+            if (existingUser) {
+                return res.status(400).json({ message: "User already exists" });
+            }
+
+            let cloudinaryReslt;
+
+            if (req.file) {
+                cloudinaryReslt = await uploadToCloudinary(req.file.buffer);
+            }
+
+            if (cloudinaryReslt) {
+                newUser.profileImageUrl = cloudinaryReslt.secure_url;
+            }
+
+            newUser.password = await hash(newUser.password, 12);
+
+            newUser.role = newUser.role.toUpperCase();
+
+            const newUserDoc = new UserModel(newUser);
+
+            await newUserDoc.save();
+
+            res.status(201).json({
+                message: "User registered successfully"
+            });
+
+        } catch (err) {
+            console.log("Registration Error:", err);
+            return res.status(500).json({
+                message: "Server error",
+                error: err.message
+            });
+        }
+    });
+});
 
 // route for login
 commonApp.post("/login", async (req, res) => {
