@@ -47,7 +47,7 @@ function Register() {
 
 
     try {
-      let res = await axios.post(`http://localhost:5000/auth/users`, formData);
+      let res = await axios.post(`https://atp-24eg112b44-1.onrender.com/auth/users`, formData);
       if (res.status === 201) {
         navigate("/login");
       }

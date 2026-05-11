@@ -43,7 +43,7 @@ function EditArticle() {
     modifiedArticle.articleId = article._id;
     //make PUT req to update article
     try {
-      let res = await axios.put(`${import.meta.env.VITE_BACKEND_URL}/author/articles`, modifiedArticle, { withCredentials: true });
+      let res = await axios.put(`https://atp-24eg112b44-1.onrender.com/author/articles`, modifiedArticle, { withCredentials: true });
       if (res.status === 200) {
         //navigate to articleid component
         navigate(`/article/${article._id}`, { state: res.data.payload });
