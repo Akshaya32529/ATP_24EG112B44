@@ -12,9 +12,11 @@ import {
 } from "../styles/common";
 
 import { useForm } from "react-hook-form";
-import { NavLink, useNavigate } from "react-router";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
+
+const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:4000";
 
 function Register() {
   const {
@@ -48,7 +50,7 @@ function Register() {
       }
 
       const res = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/auth/users`,
+        `${backendUrl}/auth/users`,
         formData,
         {
           withCredentials: true,

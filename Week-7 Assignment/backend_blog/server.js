@@ -71,15 +71,15 @@ const connectDB = async () => {
 
 connectDB()
 
+app.get("/",(req,res)=>{
+  res.send("hello world")
+})
 
 //handle invalid path
 app.use((req, res, next) => {
   console.log(req.url);
   res.status(404).json({ message: `path ${req.url} is invalid` });
 });
-app.get("/",(req,res)=>{
-  res.send("hello world")
-})
 //to handle eerrors
 app.use((err, req, res, next) => {
   console.log("error is ",err)
