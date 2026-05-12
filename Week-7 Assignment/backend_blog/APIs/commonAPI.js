@@ -111,11 +111,11 @@ commonApp.post("/login", async (req, res) => {
         )
 
         res.cookie("token", signedToken, {
-            httpOnly: true,
-            secure: false,
-            sameSite: "lax",
-            maxAge: 60 * 60 * 1000
-        })
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    maxAge: 60 * 60 * 1000
+})
 
         let userObj = user.toObject()
 
@@ -144,8 +144,8 @@ commonApp.get("/logout", async (req, res) => {
 
     res.clearCookie("token", {
         httpOnly: true,
-        secure: false,
-        sameSite: "lax"
+        secure: true,
+        sameSite: "none"
     })
 
     res.status(200).json({
