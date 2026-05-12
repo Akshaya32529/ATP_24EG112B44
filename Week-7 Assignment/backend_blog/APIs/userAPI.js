@@ -83,6 +83,11 @@ userApp.get(
 userApp.get("/test", (req, res) => {
   res.send("NEW BACKEND CODE WORKING");
 });
+userApp.get("/debug", (req, res) => {
+  res.json({
+    message: "NEW BACKEND ACTIVE"
+  });
+});
 
 // Add comment
 userApp.put(
