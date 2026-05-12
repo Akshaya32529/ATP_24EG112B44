@@ -80,6 +80,9 @@ userApp.get(
   }
 )
 
+userApp.get("/test", (req, res) => {
+  res.send("NEW BACKEND CODE WORKING");
+});
 
 // Add comment
 userApp.put(
