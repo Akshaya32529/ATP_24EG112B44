@@ -46,7 +46,7 @@ app.use(cors({
 }));
 
 // handle preflight requests
-app.options("*", cors());
+app.options(/.*/, cors());
 app.use("/auth", commonApp)
 app.use("/user", userApp)
 app.use("/author", authorApp)
