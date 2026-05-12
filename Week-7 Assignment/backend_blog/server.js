@@ -18,21 +18,39 @@ app.use(cookieParser())
 //body paser middleware
 app.use(exp.json())
 
-app.use(
-  cors({
-    origin: [
-      "http://localhost:5173",
-      "https://atp-24-eg-112-b44.vercel.app",
-      "https://atp-24-eg-112-b44-c0a4x087k-akshaya-reddy-vanga-s-projects.vercel.app",
-    ],
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true
-  })
-);
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://atp-24-eg-112-b44.vercel.app"
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+
+    // allow requests with no origin
+    if (!origin) return callback(null, true);
+
+    // allow all vercel preview deployments
+    if (
+      allowedOrigins.includes(origin) ||
+      origin.includes("vercel.app")
+    ) {
+      return callback(null, true);
+    }
+
+    return callback(new Error("CORS not allowed"));
+  },
+
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
+
+// handle preflight requests
+app.options("*", cors());
+app.use("/auth", commonApp)
 app.use("/user", userApp)
 app.use("/author", authorApp)
 app.use("/admin", adminApp)
-app.use("/auth", commonApp)
 
 const connectDB = async () => {
     try {
