@@ -1,124 +1,255 @@
 import exp from 'express'
-import {UserModel}  from '../models/userModel.js'
-import { ArticleModel } from "../models/articleModel.js";
-import { verifyToken } from "../middlewares/verifyToken.js";
+import { UserModel } from '../models/userModel.js'
+import { ArticleModel } from "../models/articleModel.js"
+import { verifyToken } from "../middlewares/verifyToken.js"
 import { hash, compare } from 'bcryptjs'
+
 export const userApp = exp.Router()
 
+// Read all articles
+userApp.get(
+  "/articles",
+  verifyToken("USER", "AUTHOR", "ADMIN"),
+  async (req, res) => {
 
-//Read all articles(protected route)
-userApp.get("/articles", verifyToken("USER"), async (req, res) => {
-  //read articles of all authors which are active
-  const articles = await ArticleModel.find({ isArticleActive: true }).populate("author").populate("comments.user");
-  //send res
-  res.status(200).json({ message: "all articles", payload: articles });
-});
+    try {
 
-//Read article by ID(protected route)
-userApp.get("/article/:articleId", verifyToken("USER", "AUTHOR", "ADMIN"), async (req, res) => {
-  const articleId = req.params.articleId;
-  const article = await ArticleModel.findOne({ _id: articleId, isArticleActive: true })
+      // get only active articles
+      const articles = await ArticleModel.find({
+        isArticleActive: true
+      })
         .populate("author")
-        .populate("comments.user");
-  
-  if (!article) {
-    return res.status(404).json({ message: "Article not found" });
+        .populate("comments.user")
+
+      // send response
+      res.status(200).json({
+        message: "all articles",
+        payload: articles
+      })
+
+    } catch (err) {
+
+      console.log(err)
+
+      res.status(500).json({
+        message: "Server error"
+      })
+    }
   }
-  
-  res.status(200).json({ message: "article found", payload: article });
-});
-
-// //Add comment to an article(protected route)
-// userApp.put("/articles", verifyToken("USER"), async (req, res) => {
-//   //get comment obj from req
-//   const { user, articleId, comment } = req.body;
-//   //check user(req.user)
-//   console.log(req.user);
-//   if (user !== req.user.userId) {
-//     return res.status(403).json({ message: "Forbidden" });
-//   }
-//   //find artcleby id and update
-//   let articleWithComment = await ArticleModel.findOneAndUpdate(
-//     { _id: articleId, isArticleActive: true },
-//     { $push: { comments: { user, comment } } },
-//     { new: true, runValidators: true },
-//   );
-
-//   //if article not found
-//   if (!articleWithComment) {
-//     return res.status(404).json({ message: "Article not found" });
-//   }
-//   //send res
-//   res.status(200).json({ message: "comment added successfully", payload: articleWithComment });
-// });
+)
 
 
+// Read article by ID
+userApp.get(
+  "/article/:articleId",
+  verifyToken("USER", "AUTHOR", "ADMIN"),
+  async (req, res) => {
 
-userApp.put("/articles",verifyToken("USER"),async(req,res)=>{
-  //get the article and comment from the request body
-  const {articleId,comment} = req.body
-  //check article
-  const articleDocument=await ArticleModel.findOne({_id:articleId,isArticleActive:true}).populate("comments.user")
-  console.log(articleDocument)
-  //if article not found
-  if(!articleDocument){
-    return res.status(404).json({message:"Article not found"})
+    try {
+
+      const articleId = req.params.articleId
+
+      // IMPORTANT:
+      // removed isArticleActive:true
+      // so deleted article can still be restored
+      const article = await ArticleModel.findById(articleId)
+        .populate("author")
+        .populate("comments.user")
+
+      // check article exists
+      if (!article) {
+        return res.status(404).json({
+          message: "Article not found"
+        })
+      }
+
+      // send response
+      res.status(200).json({
+        message: "article found",
+        payload: article
+      })
+
+    } catch (err) {
+
+      console.log(err)
+
+      res.status(500).json({
+        message: "Server error"
+      })
+    }
   }
+)
 
 
-  //get userid 
-  const userId = req.user?.id
-  //add comments
-  articleDocument.comments.push({user:userId,comment:comment})
-  await articleDocument.save()
-  
-  await articleDocument.populate("comments.user");
-  
-  //send res
-  res.status(200).json({message:"comment added successfully",payload:articleDocument})
-})
+// Add comment
+userApp.put(
+  "/articles",
+  verifyToken("USER"),
+  async (req, res) => {
+
+    try {
+
+      // get article id and comment
+      const { articleId, comment } = req.body
+
+      // find article
+      const articleDocument = await ArticleModel.findOne({
+        _id: articleId,
+        isArticleActive: true
+      }).populate("comments.user")
+
+      // article not found
+      if (!articleDocument) {
+        return res.status(404).json({
+          message: "Article not found"
+        })
+      }
+
+      // get user id
+      const userId = req.user?.id
+
+      // add comment
+      articleDocument.comments.push({
+        user: userId,
+        comment: comment
+      })
+
+      // save
+      await articleDocument.save()
+
+      // populate comments
+      await articleDocument.populate("comments.user")
+
+      // send response
+      res.status(200).json({
+        message: "Comment added successfully",
+        payload: articleDocument
+      })
+
+    } catch (err) {
+
+      console.log(err)
+
+      res.status(500).json({
+        message: "Server error"
+      })
+    }
+  }
+)
 
 
 // Delete comment
-userApp.delete("/article/:articleId/comment/:commentId", verifyToken("USER"), async (req, res) => {
-  const { articleId, commentId } = req.params;
-  const userId = req.user?.id;
+userApp.delete(
+  "/article/:articleId/comment/:commentId",
+  verifyToken("USER"),
+  async (req, res) => {
 
-  try {
-    const articleDocument = await ArticleModel.findById(articleId);
-    if (!articleDocument) return res.status(404).json({ message: "Article not found" });
+    try {
 
-    const comment = articleDocument.comments.id(commentId);
-    if (!comment) return res.status(404).json({ message: "Comment not found" });
+      const { articleId, commentId } = req.params
 
-    if (comment.user.toString() !== userId) return res.status(403).json({ message: "Unauthorized to delete this comment" });
+      const userId = req.user?.id
 
-    articleDocument.comments.pull(commentId);
-    await articleDocument.save();
-    await articleDocument.populate("comments.user");
+      // find article
+      const articleDocument = await ArticleModel.findById(articleId)
 
-    res.status(200).json({ message: "Comment deleted successfully", payload: articleDocument });
-  } catch (error) {
-    res.status(500).json({ message: "Error deleting comment", error: error.message });
+      // article not found
+      if (!articleDocument) {
+        return res.status(404).json({
+          message: "Article not found"
+        })
+      }
+
+      // find comment
+      const comment = articleDocument.comments.id(commentId)
+
+      // comment not found
+      if (!comment) {
+        return res.status(404).json({
+          message: "Comment not found"
+        })
+      }
+
+      // authorization check
+      if (comment.user.toString() !== userId) {
+        return res.status(403).json({
+          message: "Unauthorized to delete this comment"
+        })
+      }
+
+      // remove comment
+      articleDocument.comments.pull(commentId)
+
+      // save
+      await articleDocument.save()
+
+      // populate comments
+      await articleDocument.populate("comments.user")
+
+      // send response
+      res.status(200).json({
+        message: "Comment deleted successfully",
+        payload: articleDocument
+      })
+
+    } catch (error) {
+
+      console.log(error)
+
+      res.status(500).json({
+        message: "Error deleting comment",
+        error: error.message
+      })
+    }
   }
-});
+)
 
 
-//change password
-userApp.put("/password",verifyToken("USER","ADMIN","AUTHOR"),async(req,res)=>{
-  //check current password and new password are same 
-  const {currentPassword,newPassword}=req.body
-  //get current paaword of user/admin/author
-  const user = await UserModel.findById(req.user?.id)
-  //check the current password
-  const isMatched = await compare(currentPassword, user.password)
-  if(!isMatched){
-    return res.status(401).json({message:"Invalid current password"})
+// Change password
+userApp.put(
+  "/password",
+  verifyToken("USER", "ADMIN", "AUTHOR"),
+  async (req, res) => {
+
+    try {
+
+      // get passwords
+      const { currentPassword, newPassword } = req.body
+
+      // find user
+      const user = await UserModel.findById(req.user?.id)
+
+      // check current password
+      const isMatched = await compare(
+        currentPassword,
+        user.password
+      )
+
+      // invalid password
+      if (!isMatched) {
+        return res.status(401).json({
+          message: "Invalid current password"
+        })
+      }
+
+      // hash new password
+      user.password = await hash(newPassword, 12)
+
+      // save
+      await user.save()
+
+      // send response
+      res.status(200).json({
+        message: "Password changed successfully"
+      })
+
+    } catch (err) {
+
+      console.log(err)
+
+      res.status(500).json({
+        message: "Server error"
+      })
+    }
   }
-  //hash new password
-  user.password = await hash(newPassword, 12)
-  await user.save()
-  res.status(200).json({message:"Password changed successfully"})
-
-
-})
+)

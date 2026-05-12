@@ -1,32 +1,58 @@
+import jwt from "jsonwebtoken";
+import { config } from "dotenv";
 
-import jwt from "jsonwebtoken"
-import { config } from "dotenv"
-const { verify } = jwt
-config()
+const { verify } = jwt;
 
-//it is a function which returns middleware
-export const verifyToken = (...allowedRoles) => {//verifyToken ("AUTHOR","USER","ADMIN")
+config();
+
+// middleware generator
+export const verifyToken = (...allowedRoles) => {
+
     return (req, res, next) => {
+
         try {
-            //get token from cookie
-            const token = req.cookies?.token //req.cookies is an object and token is variable we exactly used in commonAPI 
-            //check if token exists
+
+            // get token from cookies
+            const token = req.cookies?.token;
+
+            // check token exists
             if (!token) {
-                return res.status(401).json({ message: "please login first" })
-            }
-            //validate token (decoding)
-            let decodedToken = verify(token, process.env.SECRET_KEY) //vrify token throws error if invalid ,if valid it returns decoded token
-            //check role same as in decoded token 
-            if (!allowedRoles.map(r => r.toUpperCase()).includes(decodedToken.role.toUpperCase())) {
-                return res.status(403).json({ message: "You're not authorized" })
+                return res.status(401).json({
+                    message: "Please login first"
+                });
             }
 
-            ///add decoded token to req
-            req.user = decodedToken
-            next()
+            // verify token
+            const decodedToken = verify(
+                token,
+                process.env.SECRET_KEY
+            );
+
+            // if roles are provided, check authorization
+            if (
+                allowedRoles.length > 0 &&
+                !allowedRoles
+                    .map(role => role.toUpperCase())
+                    .includes(decodedToken.role.toUpperCase())
+            ) {
+
+                return res.status(403).json({
+                    message: "You're not authorized"
+                });
+            }
+
+            // attach user to request
+            req.user = decodedToken;
+
+            next();
+
         } catch (err) {
-            return res.status(401).json({ message: "Invalid token" })
-        }
-    }
-}
 
+            console.log(err);
+
+            return res.status(401).json({
+                message: "Invalid token"
+            });
+        }
+    };
+};
