@@ -27,6 +27,9 @@ export const verifyToken = (...allowedRoles) => {
                 token,
                 process.env.SECRET_KEY
             );
+            console.log("DECODED TOKEN:", decodedToken);
+console.log("TOKEN ROLE:", decodedToken.role);
+console.log("ALLOWED ROLES:", allowedRoles);
 
             // if roles are provided, check authorization
             if (
