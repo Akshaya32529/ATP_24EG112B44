@@ -46,10 +46,11 @@ function ArticleByID() {
     const getArticle = async () => {
       if (!article) setLoading(true); // Only show loading if we don't have initial state
       try {
-        const res = await axios.get(`https://atp-24eg112b44-1.onrender.com/user/article/${id}`, { withCredentials: true });
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/user/article/${id}`, { withCredentials: true });
         setArticle(res.data.payload);
       } catch (err) {
-        setError(err.response?.data?.error || "Error fetched article");
+        const errorMessage = err.response?.data?.error || err.response?.data?.message || err.message || "Error fetched article";
+        setError(typeof errorMessage === 'object' ? JSON.stringify(errorMessage) : errorMessage);
       } finally {
         setLoading(false);
       }
@@ -75,7 +76,7 @@ function ArticleByID() {
 
     try {
       const res = await axios.patch(
-        `https://atp-24eg112b44-1.onrender.com/author/articles`,
+        `${import.meta.env.VITE_BACKEND_URL}/author/articles`,
         { articleId: id, isArticleActive: newStatus },
         { withCredentials: true },
       );
@@ -93,7 +94,8 @@ function ArticleByID() {
       if (err.response?.status === 400) {
         alert(msg); // already deleted/active case
       } else {
-        setError(msg || "Operation failed");
+        const errorMessage = msg || err.message || "Operation failed";
+        setError(typeof errorMessage === 'object' ? JSON.stringify(errorMessage) : errorMessage);
       }
     }
   };
@@ -109,7 +111,7 @@ function ArticleByID() {
     commentObj.articleId = article._id;
     console.log(commentObj);
     try {
-      let res = await axios.put(`https://atp-24eg112b44-1.onrender.com/user/articles`, commentObj, { withCredentials: true });
+      let res = await axios.put(`${import.meta.env.VITE_BACKEND_URL}/user/articles`, commentObj, { withCredentials: true });
       if (res.status === 200) {
         setArticle(res.data.payload);
         reset(); // Clear the form input
@@ -124,7 +126,7 @@ function ArticleByID() {
   const deleteComment = async (commentId) => {
     if (!window.confirm("Delete this comment?")) return;
     try {
-      let res = await axios.delete(`https://atp-24eg112b44-1.onrender.com/user/article/${article._id}/comment/${commentId}`, { withCredentials: true });
+      let res = await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/user/article/${article._id}/comment/${commentId}`, { withCredentials: true });
       if (res.status === 200) {
         setArticle(res.data.payload);
       }

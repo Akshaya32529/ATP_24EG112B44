@@ -27,13 +27,14 @@ function UserProfile() {
       setLoading(true);
       try {
         //read articles of all authors
-        let res = await axios.get(`https://atp-24eg112b44-1.onrender.com/user/articles`, { withCredentials: true })
+        let res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/user/articles`, { withCredentials: true })
         //update articles state
         if (res.status === 200) {
           setArticles(res.data.payload)
         }
       } catch (err) {
-        setError(err.response?.data?.error || "Something went wrong");
+        const errorMessage = err.response?.data?.error || err.message || "Something went wrong";
+        setError(typeof errorMessage === 'object' ? JSON.stringify(errorMessage) : errorMessage);
       } finally {
         setLoading(false);
       }

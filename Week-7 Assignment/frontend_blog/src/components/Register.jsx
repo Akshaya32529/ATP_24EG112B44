@@ -64,11 +64,13 @@ function Register() {
     } catch (err) {
       console.log("err in registration", err);
 
-      setApiError(
+      const errorMessage = 
         err.response?.data?.message ||
         err.response?.data?.error ||
-        "Registration failed"
-      );
+        err.message ||
+        "Registration failed";
+
+      setApiError(typeof errorMessage === 'object' ? JSON.stringify(errorMessage) : errorMessage);
     } finally {
       setLoading(false);
     }

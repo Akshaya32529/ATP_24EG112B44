@@ -27,11 +27,12 @@ function AdminProfile() {
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(`https://atp-24eg112b44-1.onrender.com/admin/users`, { withCredentials: true });
+      const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/admin/users`, { withCredentials: true });
       setUsers(res.data.payload || []);
       setError(null);
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to fetch users.");
+      const errorMessage = err.response?.data?.message || err.message || "Failed to fetch users.";
+      setError(typeof errorMessage === 'object' ? JSON.stringify(errorMessage) : errorMessage);
     } finally {
       setLoading(false);
     }
@@ -44,9 +45,9 @@ function AdminProfile() {
   const handleToggleBlock = async (userId, isCurrentlyActive) => {
     try {
       if (isCurrentlyActive) {
-        await axios.put(`https://atp-24eg112b44-1.onrender.com/admin/user/${userId}`, {}, { withCredentials: true });
+        await axios.put(`${import.meta.env.VITE_BACKEND_URL}/admin/user/${userId}`, {}, { withCredentials: true });
       } else {
-        await axios.put(`https://atp-24eg112b44-1.onrender.com/admin/user-unblock/${userId}`, {}, { withCredentials: true });
+        await axios.put(`${import.meta.env.VITE_BACKEND_URL}/admin/user-unblock/${userId}`, {}, { withCredentials: true });
       }
       // Refresh user list
       fetchUsers();

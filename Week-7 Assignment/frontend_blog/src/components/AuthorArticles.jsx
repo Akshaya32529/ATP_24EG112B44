@@ -19,7 +19,7 @@ function AuthorArticles() {
         //set loading true
         setLoading(true);
         //make get request to get all articles of author
-        const res = await axios.get(`https://atp-24eg112b44-1.onrender.com/author/articles`, {
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/author/articles`, {
           withCredentials: true,
         });
         if (res.status === 200) {
@@ -27,7 +27,8 @@ function AuthorArticles() {
         }
       } catch (err) {
         console.log(err);
-        setError(err.response?.data?.message || "Failed to fetch articles");
+        const errorMessage = err.response?.data?.message || err.message || "Failed to fetch articles";
+        setError(typeof errorMessage === 'object' ? JSON.stringify(errorMessage) : errorMessage);
       } finally {
         setLoading(false);
       }

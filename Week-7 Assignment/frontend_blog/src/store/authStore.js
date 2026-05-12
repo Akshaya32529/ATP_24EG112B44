@@ -23,12 +23,12 @@ export const useAuth = create(
           }
         } catch (err) {
           console.log("err is ", err);
+          const errorMessage = err.response?.data?.message || err.response?.data?.error || err.message || "Login failed";
           set({
             loading: false,
             isAuthenticated: false,
             currentUser: null,
-            //error: err,
-            error: err.response?.data?.message || err.response?.data?.error || "Login failed",
+            error: typeof errorMessage === 'object' ? JSON.stringify(errorMessage) : errorMessage,
           });
         }
 

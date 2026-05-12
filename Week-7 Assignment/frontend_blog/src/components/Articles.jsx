@@ -14,7 +14,7 @@ function Articles() {
   useEffect(() => {
     const fetchAllArticles = async () => {
       try {
-        const res = await axios.get(`https://atp-24eg112b44-1.onrender.com/user/articles`, { withCredentials: true });
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/user/articles`, { withCredentials: true });
         setArticles(res.data.payload || []);
       } catch (err) {
         if (err.response?.status === 401) {
@@ -23,7 +23,8 @@ function Articles() {
           useAuth.setState({ isAuthenticated: false, currentUser: null });
           navigate("/login");
         } else {
-          setError(err.response?.data?.message || "Failed to fetch articles");
+          const errorMessage = err.response?.data?.message || err.message || "Failed to fetch articles";
+          setError(typeof errorMessage === 'object' ? JSON.stringify(errorMessage) : errorMessage);
         }
       } finally {
         setLoading(false);
