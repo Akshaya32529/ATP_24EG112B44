@@ -1,6 +1,4 @@
-# 5-04-2025
-# Storing files in mini app 
-//understanding the uploading of files and images 
+
 
 client                                          backend
 --------------------------------------------------------
@@ -37,5 +35,5 @@ to go browser-> cloudinary.com -> login -> dashboard->product environment -> the
 (2)api key
 (3)api secret
 
---install cloudinary and multer in backend
+-install cloudinary and multer in backend
 npm install cloudinary multer
