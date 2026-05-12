@@ -23,55 +23,63 @@ const allowedOrigins = [
   "https://atp-24-eg-112-b44.vercel.app"
 ];
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://atp-24-eg-112-b44.vercel.app"
+];
+
 app.use(cors({
-  origin: function (origin, callback) {
+  origin: (origin, callback) => {
 
-    // allow requests with no origin
-    if (!origin) return callback(null, true);
-
-    // allow all vercel preview deployments
-    if (
-      allowedOrigins.includes(origin) ||
-      (origin&&origin.includes("vercel.app"))
-    ) {
+    // allow requests without origin
+    if (!origin) {
       return callback(null, true);
     }
 
-    return callback(null,true);
+    // allow localhost + vercel
+    if (
+      allowedOrigins.includes(origin) ||
+      origin.includes("vercel.app")
+    ) {
+      return callback(null, origin);
+    }
+
+    // reject other origins
+    return callback(new Error("Not allowed by CORS"));
   },
 
   credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE","PATCH", "OPTIONS"],
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
 // handle preflight requests
-app.options(/.*/, cors());
+
 app.use("/auth", commonApp)
 app.use("/user", userApp)
 app.use("/author", authorApp)
 app.use("/admin", adminApp)
 
 const connectDB = async () => {
-    try {
-        if(!process.env.DB_URL){
-            throw new Error("DB_URL is not defined in .env file")
-        }
-        await connect(process.env.DB_URL)
-        console.log("database connected")
-        const port = process.env.PORT || 4000
-        app.listen(port, () => {
-            console.log(`server is running on port ${port}`)
-        })
+  try {
+    if (!process.env.DB_URL) {
+      throw new Error("DB_URL is not defined in .env file")
     }
-    catch (error) {
-        console.log("error is db connect ",error)
-    }
+    await connect(process.env.DB_URL)
+    console.log("database connected")
+    const port = process.env.PORT || 4000
+    app.listen(port, () => {
+      console.log(`server is running on port ${port}`)
+    })
+  }
+  catch (error) {
+    console.log("error is db connect ", error)
+  }
 }
 
 connectDB()
 
-app.get("/",(req,res)=>{
+app.get("/", (req, res) => {
   res.send("hello world")
 })
 
@@ -82,7 +90,7 @@ app.use((req, res, next) => {
 });
 //to handle eerrors
 app.use((err, req, res, next) => {
-  console.log("error is ",err)
+  console.log("error is ", err)
   console.log("Full error:", JSON.stringify(err, null, 2));
   //ValidationError
   if (err.name === "ValidationError") {
