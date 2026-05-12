@@ -3,6 +3,8 @@ import { UserModel } from '../models/userModel.js'
 import { hash, compare } from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { verifyToken } from '../middlewares/verifyToken.js'
+import { upload } from '../config/multer.js'
+import { uploadToCloudinary } from '../config/cloudinaryUpload.js'
 
 const { sign } = jwt
 
@@ -13,10 +15,11 @@ let allowedRoles = ["USER", "AUTHOR"]
 
 
 // ================= REGISTER =================
-commonApp.post("/users", async (req, res, next) => {
+commonApp.post("/users", upload.single('profileImage'), async (req, res, next) => {
     try {
 
         console.log("REQ BODY:", req.body)
+        console.log("FILE:", req.file)
 
         // get user data
         const newUser = req.body
@@ -37,6 +40,12 @@ commonApp.post("/users", async (req, res, next) => {
             return res.status(400).json({
                 message: "User already exists"
             })
+        }
+
+        // Handle profile image upload if present
+        if (req.file) {
+            const result = await uploadToCloudinary(req.file.buffer)
+            newUser.profileImageUrl = result.secure_url
         }
 
         // hash password

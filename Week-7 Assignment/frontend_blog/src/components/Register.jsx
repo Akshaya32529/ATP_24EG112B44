@@ -34,17 +34,27 @@ function Register() {
     setApiError(null);
 
     try {
+      // Create FormData object to support file upload
+      const formData = new FormData();
+      formData.append("firstName", userObj.firstName);
+      formData.append("lastName", userObj.lastName || "");
+      formData.append("email", userObj.email);
+      formData.append("password", userObj.password);
+      formData.append("role", userObj.role);
+
+      // Add profile image if selected
+      if (userObj.profileImage && userObj.profileImage[0]) {
+        formData.append("profileImage", userObj.profileImage[0]);
+      }
+
       const res = await axios.post(
-        "https://atp-24eg112b44-1.onrender.com/auth/users",
-        {
-          firstName: userObj.firstName,
-          lastName: userObj.lastName,
-          email: userObj.email,
-          password: userObj.password,
-          role: userObj.role,
-        },
+        `${import.meta.env.VITE_BACKEND_URL}/auth/users`,
+        formData,
         {
           withCredentials: true,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         }
       );
 
@@ -152,6 +162,10 @@ function Register() {
               className={inputClass}
               {...register("password", {
                 required: "Password is required",
+                minLength: {
+                  value: 8,
+                  message: "Password must be at least 8 characters",
+                },
               })}
             />
             {errors.password && (
@@ -159,14 +173,15 @@ function Register() {
             )}
           </div>
 
-          {/* PROFILE IMAGE (ONLY PREVIEW - NOT SENT YET) */}
+          {/* PROFILE IMAGE */}
           <div className={formGroup}>
-            <label className={labelClass}>Profile Image (Preview only)</label>
+            <label className={labelClass}>Profile Image</label>
 
             <input
               type="file"
               className={inputClass}
               accept="image/png, image/jpeg"
+              {...register("profileImage")}
               onChange={(e) => {
                 const file = e.target.files[0];
                 if (file) {
