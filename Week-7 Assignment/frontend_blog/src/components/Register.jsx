@@ -1,4 +1,3 @@
-
 import {
   divider,
   errorClass,
@@ -11,6 +10,7 @@ import {
   submitBtn,
   mutedText,
 } from "../styles/common";
+
 import { useForm } from "react-hook-form";
 import { NavLink, useNavigate } from "react-router";
 import { useState } from "react";
@@ -22,38 +22,43 @@ function Register() {
     handleSubmit,
     formState: { errors },
   } = useForm();
+
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState(null);
   const [preview, setPreview] = useState(null);
 
-  //When user registration submitted
+  // REGISTER USER
   const onUserRegister = async (userObj) => {
     setLoading(true);
     setApiError(null);
-    //file + userobj -> FormData(class) -> backend
-    const formData = new FormData();
-    //add all user properties and fike to this formdata 
-    formData.append("firstName", userObj.firstName);
-    formData.append("lastName", userObj.lastName);
-    formData.append("email", userObj.email);
-    formData.append("password", userObj.password);
-    formData.append("role", userObj.role);
-    //append if image exists
-    if (userObj.profileImageUrl?.[0]) {
-      formData.append("profileImageUrl", userObj.profileImageUrl[0]);
-    }
-
-
 
     try {
-      let res = await axios.post(`https://atp-24eg112b44-1.onrender.com/auth/users`, formData,{withCredentials:true,headers:{"Content-Type":"multipart/form-data"}});
+      const res = await axios.post(
+        "https://atp-24eg112b44-1.onrender.com/auth/users",
+        {
+          firstName: userObj.firstName,
+          lastName: userObj.lastName,
+          email: userObj.email,
+          password: userObj.password,
+          role: userObj.role,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+
       if (res.status === 201) {
         navigate("/login");
       }
     } catch (err) {
       console.log("err in registration", err);
-      setApiError(err.response?.data?.message || err.response?.data?.error || "Registration failed");
+
+      setApiError(
+        err.response?.data?.message ||
+        err.response?.data?.error ||
+        "Registration failed"
+      );
     } finally {
       setLoading(false);
     }
@@ -68,6 +73,7 @@ function Register() {
         {apiError && <p className={`${errorClass} mb-4`}>{apiError}</p>}
 
         <form onSubmit={handleSubmit(onUserRegister)}>
+          
           {/* ROLE */}
           <div className="mb-5">
             <p className={labelClass}>Register as</p>
@@ -77,9 +83,7 @@ function Register() {
                 <input
                   type="radio"
                   value="USER"
-                  {...register("role", {
-                    required: "Please select a role",
-                  })}
+                  {...register("role", { required: "Please select a role" })}
                   className="accent-blue-600 w-4 h-4"
                 />
                 <span className="text-sm">User</span>
@@ -89,9 +93,7 @@ function Register() {
                 <input
                   type="radio"
                   value="AUTHOR"
-                  {...register("role", {
-                    required: "Please select a role",
-                  })}
+                  {...register("role", { required: "Please select a role" })}
                   className="accent-blue-600 w-4 h-4"
                 />
                 <span className="text-sm">Author</span>
@@ -110,21 +112,13 @@ function Register() {
               <input
                 type="text"
                 className={inputClass}
-                placeholder="First name"
                 {...register("firstName", {
                   required: "First name is required",
-                  minLength: {
-                    value: 2,
-                    message: "At least 2 characters required",
-                  },
-                  maxLength: {
-                    value: 30,
-                    message: "Max 30 characters allowed",
-                  },
-                  validate: (v) => v.trim().length > 0 || "Cannot be empty",
                 })}
               />
-              {errors.firstName && <p className={errorClass}>{errors.firstName.message}</p>}
+              {errors.firstName && (
+                <p className={errorClass}>{errors.firstName.message}</p>
+              )}
             </div>
 
             <div className="flex-1">
@@ -132,15 +126,8 @@ function Register() {
               <input
                 type="text"
                 className={inputClass}
-                placeholder="Last name"
-                {...register("lastName", {
-                  maxLength: {
-                    value: 30,
-                    message: "Max 30 characters allowed",
-                  },
-                })}
+                {...register("lastName")}
               />
-              {errors.lastName && <p className={errorClass}>{errors.lastName.message}</p>}
             </div>
           </div>
 
@@ -150,10 +137,8 @@ function Register() {
             <input
               type="email"
               className={inputClass}
-              placeholder="you@example.com"
               {...register("email", {
                 required: "Email is required",
-                required: [true, "Password is required"],
               })}
             />
             {errors.email && <p className={errorClass}>{errors.email.message}</p>}
@@ -165,59 +150,46 @@ function Register() {
             <input
               type="password"
               className={inputClass}
-              placeholder="Min. 8 characters"
               {...register("password", {
                 required: "Password is required",
               })}
             />
-            {errors.password && <p className={errorClass}>{errors.password.message}</p>}
+            {errors.password && (
+              <p className={errorClass}>{errors.password.message}</p>
+            )}
           </div>
 
-          {/* PROFILE IMAGE */}
+          {/* PROFILE IMAGE (ONLY PREVIEW - NOT SENT YET) */}
           <div className={formGroup}>
-            <label className={labelClass}>Profile Image</label>
+            <label className={labelClass}>Profile Image (Preview only)</label>
 
-            <input type="file"
+            <input
+              type="file"
               className={inputClass}
               accept="image/png, image/jpeg"
-              {...register("profileImageUrl", {
-                validate: {
-                  fileType: (files) => {
-                    if (!files?.[0])
-                      return true;
-                    return ["image/png", "image/jpeg"].includes(files[0].type) || "Only JPG/PNG allowed"
-                  },
-                  fileSize: (files) => {
-                    if (!files?.[0])
-                      return true;
-                    return files[0].size <= 2 * 1024 * 1024 || "File size must be less than 2MB"
-                  }
-                }
-              })}
               onChange={(e) => {
-                //console.log(e.target.files[0]);
-                let file = e.target.files[0];
+                const file = e.target.files[0];
                 if (file) {
-                  setPreview(URL.createObjectURL(file))
+                  setPreview(URL.createObjectURL(file));
                 }
               }}
             />
-
-            {errors.profileImageUrl && <p className={errorClass}>{errors.profileImageUrl.message}</p>}
           </div>
-
 
           {/* IMAGE PREVIEW */}
           {preview && (
             <div className="mt-3">
-              <img src={preview} alt="Preview" className="w-32 h-32 object-cover rounded-lg" />
+              <img
+                src={preview}
+                alt="Preview"
+                className="w-32 h-32 object-cover rounded-lg"
+              />
             </div>
           )}
 
-
           {/* SUBMIT */}
-          <button type="submit" className={submitBtn}>
-            Create Account
+          <button type="submit" className={submitBtn} disabled={loading}>
+            {loading ? "Creating..." : "Create Account"}
           </button>
         </form>
 
