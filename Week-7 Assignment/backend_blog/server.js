@@ -32,12 +32,12 @@ app.use(cors({
     // allow all vercel preview deployments
     if (
       allowedOrigins.includes(origin) ||
-      origin.includes("vercel.app")
+      (origin&&origin.includes("vercel.app"))
     ) {
       return callback(null, true);
     }
 
-    return callback(new Error("CORS not allowed"));
+    return callback(null,true);
   },
 
   credentials: true,
