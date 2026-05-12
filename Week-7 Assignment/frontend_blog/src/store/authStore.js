@@ -17,7 +17,7 @@ export const useAuth = create(
           //set loading true
           set(state => ({ ...state, loading: true }))
           //make api call
-          let res = await axios.post(`${BACKEND_URL}/auth/login`, userCredObj, { withCredentials: true })
+          let res = await axios.post(`https://atp-24eg112b44-1.onrender.com/auth/login`, userCredObj, { withCredentials: true })
           //update state
           if (res.status === 200) {
             set(state => ({ ...state, loading: false, isAuthenticated: true, currentUser: res.data.payload, error: null }))

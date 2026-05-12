@@ -38,7 +38,7 @@ function WriteArticles() {
 
     try {
       //make POST request to save article (URL should be singular /author/article)
-      let res = await axios.post(https://atp-24eg112b44-1.onrender.com/author/article`, articleObj, { withCredentials: true });
+      let res = await axios.post(`https://atp-24eg112b44-1.onrender.com/author/article`, articleObj, { withCredentials: true });
 
       if (res.status === 201) {
         toast.success("Article published successfully", { duration: 2000 })

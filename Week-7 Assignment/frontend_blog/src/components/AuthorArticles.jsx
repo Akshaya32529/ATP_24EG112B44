@@ -20,7 +20,7 @@ function AuthorArticles() {
         //set loading true
         setLoading(true);
         //make get request to get all articles of author
-        const res = await axios.get(https://atp-24eg112b44-1.onrender.com/author/articles`, {
+        const res = await axios.get(`https://atp-24eg112b44-1.onrender.com/author/articles`, {
           withCredentials: true,
         });
   if (res.status === 200) {

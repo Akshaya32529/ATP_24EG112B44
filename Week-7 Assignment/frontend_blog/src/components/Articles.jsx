@@ -15,7 +15,7 @@ function Articles() {
   useEffect(() => {
     const fetchAllArticles = async () => {
       try {
-        const res = await axios.get(https://atp-24eg112b44-1.onrender.com/user/articles`, { withCredentials: true });
+        const res = await axios.get(`https://atp-24eg112b44-1.onrender.com/user/articles`, { withCredentials: true });
           setArticles(res.data.payload || []);
       } catch (err) {
         if (err.response?.status === 401) {
