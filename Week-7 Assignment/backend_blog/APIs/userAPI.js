@@ -2,7 +2,7 @@ import exp from 'express'
 import {UserModel}  from '../models/userModel.js'
 import { ArticleModel } from "../models/articleModel.js";
 import { verifyToken } from "../middlewares/verifyToken.js";
-//import {hash,compare} from 'bcrypt'
+import { hash, compare } from 'bcryptjs'
 export const userApp = exp.Router()
 
 
@@ -110,14 +110,15 @@ userApp.put("/password",verifyToken("USER","ADMIN","AUTHOR"),async(req,res)=>{
   const {currentPassword,newPassword}=req.body
   //get current paaword of user/admin/author
   const user = await UserModel.findById(req.user?.id)
-  //check the current password of the request and user are not same
-  if(user.password !== currentPassword){
+  //check the current password
+  const isMatched = await compare(currentPassword, user.password)
+  if(!isMatched){
     return res.status(401).json({message:"Invalid current password"})
   }
-  //hash new password and replace the current password with hashenewpassword and save it and send response 
-  user.password = newPassword
+  //hash new password
+  user.password = await hash(newPassword, 12)
   await user.save()
-  res.status(200).json({message:"Password changed successfully",payload:user})
+  res.status(200).json({message:"Password changed successfully"})
 
 
 })

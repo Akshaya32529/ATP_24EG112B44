@@ -3,6 +3,7 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router";
 import { pageWrapper, pageTitleClass } from "../styles/common";
 import { useAuth } from "../store/authStore";
+import { BACKEND_URL } from "../utils/config";
 
 function Articles() {
   const navigate = useNavigate();
@@ -14,8 +15,8 @@ function Articles() {
   useEffect(() => {
     const fetchAllArticles = async () => {
       try {
-        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/user/articles`, { withCredentials: true });
-        setArticles(res.data.payload || []);
+        const res = await axios.get(https://atp-24eg112b44-1.onrender.com/user/articles`, { withCredentials: true });
+          setArticles(res.data.payload || []);
       } catch (err) {
         if (err.response?.status === 401) {
           // Token is missing or expired, but Zustand still thinks we are logged in.

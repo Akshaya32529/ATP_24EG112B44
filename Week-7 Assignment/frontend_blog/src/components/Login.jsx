@@ -11,7 +11,7 @@ import {
   linkClass,
 } from "../styles/common";
 import { useEffect, useRef } from "react";
-import { NavLink, useNavigate, useLocation } from "react-router";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../store/authStore";
 import { toast } from "react-hot-toast";

@@ -15,8 +15,9 @@ import { useForm } from "react-hook-form";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
+import { BACKEND_URL } from "../utils/config";
 
-const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:4000";
+
 
 function Register() {
   const {
@@ -49,8 +50,7 @@ function Register() {
         formData.append("profileImage", userObj.profileImage[0]);
       }
 
-      const res = await axios.post(
-        `${backendUrl}/auth/users`,
+      const res = await axios.post(`https://atp-24eg112b44-1.onrender.com/auth/users`,
         formData,
         {
           withCredentials: true,
@@ -66,7 +66,7 @@ function Register() {
     } catch (err) {
       console.log("err in registration", err);
 
-      const errorMessage = 
+      const errorMessage =
         err.response?.data?.message ||
         err.response?.data?.error ||
         err.message ||
@@ -87,7 +87,7 @@ function Register() {
         {apiError && <p className={`${errorClass} mb-4`}>{apiError}</p>}
 
         <form onSubmit={handleSubmit(onUserRegister)}>
-          
+
           {/* ROLE */}
           <div className="mb-5">
             <p className={labelClass}>Register as</p>
