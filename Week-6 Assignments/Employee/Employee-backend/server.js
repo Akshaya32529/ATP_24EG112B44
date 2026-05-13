@@ -12,7 +12,7 @@ const app = exp()
 
 // add cors
 app.use(cors({
-  origin: ["http://localhost:5173"]
+  origin: ["http://localhost:5173","https://atp-24eg112b44-2.onrender.com"]
 }))
 
 // middleware
