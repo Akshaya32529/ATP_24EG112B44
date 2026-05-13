@@ -13,7 +13,7 @@ const app = exp()
 // add cors
 app.use(cors({
   origin: [
-    "http://localhost:5173","atp-24-eg-112-b44-uo23.vercel.app"
+    "http://localhost:5173","https://atp-24-eg-112-b44-uo23.vercel.app"
   ]
 }))
 // middleware
