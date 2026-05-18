@@ -164,6 +164,7 @@ Run:
 node employeePayrollProcessor.js
 ```
 
+
 ### 7. Movie Recommendation System
 
 Analyzes movie records for a streaming platform.
@@ -175,6 +176,7 @@ The program:
 - Calculates average movie rating
 - Finds the movie named Joker
 - Finds the index of the movie named Avengers
+
 
 Run:
 

@@ -56,6 +56,7 @@ Product APIs are available under `/product-api`. They handle creating products, 
 
 After login, the JWT token is stored in a cookie named `token`. Protected routes use this cookie to verify whether the user is logged in.
 
+
 ## Testing
 
 Use the `req.http` file to test the APIs from VS Code. First login with valid user credentials, then test protected routes such as reading users or adding a product to the cart. For product update, delete, and cart operations, use the MongoDB ObjectId of the product or user document.

@@ -21,6 +21,7 @@ Files:
 
 This page builds a two-section graphic-style layout. The top section contains heading text and an image, while the bottom section uses three columns. It demonstrates flexbox alignment, column layout, background colors, spacing, and image placement.
 
+
 ### Best City Guide Layout
 Files:
 
@@ -28,6 +29,7 @@ Files:
 - `Layout2.css`
 
 This assignment creates a city guide page with a header, intro section, image content, and three informational columns. It demonstrates semantic layout structure, flexbox columns, CSS grid for food images, navigation-like heading text, and content organization.
+
 
 ### Card Layout
 Files:

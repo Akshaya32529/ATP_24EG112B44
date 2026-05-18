@@ -102,6 +102,7 @@ Mounted at `/user`.
 
 ### Author Routes
 
+
 Mounted at `/author`.
 
 - `POST /author/article`: Create a new article. Requires `AUTHOR`.
@@ -236,6 +237,7 @@ sameSite: "none"
 This is suitable for deployed HTTPS frontend/backend communication. For local HTTP-only development, cookie settings may need adjustment.
 
 ## Suggested Future Enhancements
+
 
 - Add backend scripts such as `"start": "node server.js"` and `"dev": "nodemon server.js"`.
 - Replace hard-coded frontend API URLs with `BACKEND_URL`.
