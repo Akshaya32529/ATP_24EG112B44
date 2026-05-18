@@ -4,6 +4,7 @@ This repository contains JavaScript assignments covering basic conditional logic
 
 ## 1. Conditional Logic
 
+
 ### Biggest of Two Numbers (`bigOfTwo.js`)
 - Demonstrates finding the largest of two numbers using if-else statements.
 - Also shows the use of ternary operators for concise conditional logic.
@@ -13,6 +14,7 @@ This repository contains JavaScript assignments covering basic conditional logic
 - `bigOfThreeFunc.js`: Implements a function to determine the biggest of three numbers, promoting code reusability.
 
 ## 2. Array Manipulations
+
 
 ### Sum of Array Elements
 - `sumofArray.js`: Calculates the sum of elements in an array using a for loop.
@@ -25,6 +27,7 @@ This repository contains JavaScript assignments covering basic conditional logic
 - Implements a search function that returns the index of a target element in an array or "not found" if absent.
 
 ## 3. Advanced Object & Array Operations
+
 
 ### Employee Data Management (`EmpData.js`)
 - Manages an array of employee objects, each containing employee number, name, and marks array.
