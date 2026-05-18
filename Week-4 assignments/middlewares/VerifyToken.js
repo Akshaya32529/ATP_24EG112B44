@@ -28,23 +28,3 @@ export const verifyToken = (...allowedRoles) => {
   };
 };
 
-// export const verifyToken = async (req, res, next) => {
-//   try {
-//     //get token from cookie
-//     const token = req.cookies?.token; // { token : asdasd}
-//     //check token existed or not
-//     if (!token) {
-//       return res.status(401).json({ message: "Please login first" });
-//     }
-//     //validate token(decode the token)
-//     let decodedToken = verify(token, process.env.SECRET_KEY);
-
-//     // check the role is same as role in decodedToken
-
-//     //add decoded token
-//     res.user = decodedToken;
-//     next();
-//   } catch (err) {
-//     res.status(401).json({ message: "Invalid token" });
-//   }
-// };
