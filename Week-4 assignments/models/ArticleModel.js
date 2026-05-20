@@ -13,6 +13,7 @@ const commentSchema = new Schema({
 
 const articleSchema = new Schema(
   {
+    
     author: {
       type: Types.ObjectId,
       ref: "user",
