@@ -11,6 +11,7 @@ Tasks:
     3. reduce() to calculate average temperature
     4. find() first temperature above 40
     5. findIndex() of temperature 28*/
+ 
     
 const temperatures=[32,35,28,40,38,30,42];
 // 1. Filter temperatures greater than 35°C

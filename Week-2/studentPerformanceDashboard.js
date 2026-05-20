@@ -11,6 +11,7 @@ const students = [
   { id: 5, name: "Arjun", marks: 40 }
 ];
 
+
 Tasks:
   1. filter() students who passed (marks ≥ 40)
   2. map() to add a grade field

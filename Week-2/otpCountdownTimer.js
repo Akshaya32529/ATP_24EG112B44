@@ -1,7 +1,7 @@
 // OTP Countdown Timer
 // Uses setInterval() to count down before the user can resend an OTP.
 
-console.log("OTP sent successfully");
+console.log("OTP sent  successfully");
 
 let seconds = 10;
 

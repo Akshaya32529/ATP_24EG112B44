@@ -15,6 +15,7 @@ const order = {
   ]
 };
 
+
 const orderCopy = structuredClone(order);
 
 // These changes affect only the cloned order.

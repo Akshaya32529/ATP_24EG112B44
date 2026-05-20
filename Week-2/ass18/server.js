@@ -28,6 +28,7 @@ app.use(middleware2)
 app.use('/user-api',userApp)
 app.use('/product-api',productApp)
 
+
 //port
 const port = 3000
 app.listen(port,()=>console.log(`server listening port ${port}`))

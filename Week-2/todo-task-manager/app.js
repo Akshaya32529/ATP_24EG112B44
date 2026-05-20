@@ -4,6 +4,7 @@ import { addTask, getAllTasks, completeTask } from './task.js';
 console.log(addTask("Study JavaScript", "high", "2026-04-01"));
 console.log(addTask("Buy groceries", "medium", "2026-03-20"));
 
+
 // Display all tasks currently stored in the task list.
 console.log("\nAll Tasks:");
 console.log(getAllTasks());

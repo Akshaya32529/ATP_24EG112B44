@@ -27,6 +27,7 @@ export function addTask(title, priority, dueDate) {
   return "Task added successfully";
 }
 
+
 // Get all tasks
 export function getAllTasks() {
   return tasks;

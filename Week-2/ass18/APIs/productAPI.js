@@ -4,6 +4,7 @@ export const productApp = exp.Router()
 
 let products=[]
 
+
 //read all products
 productApp.get('/products',(req,res)=>{
     res.json({message:"all products",payload:products})

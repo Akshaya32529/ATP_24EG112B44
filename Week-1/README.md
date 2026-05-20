@@ -9,6 +9,7 @@ This repository contains JavaScript assignments covering basic conditional logic
 - Demonstrates finding the largest of two numbers using if-else statements.
 - Also shows the use of ternary operators for concise conditional logic.
 
+
 ### Biggest of Three Numbers
 - `bigOfThree.js`: Finds the largest of three numbers using nested if-else statements and ternary operators.
 - `bigOfThreeFunc.js`: Implements a function to determine the biggest of three numbers, promoting code reusability.

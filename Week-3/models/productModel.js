@@ -21,5 +21,4 @@ const productSchema = new Schema({
         required:[true,"brand is required"]
     }
 })
-
 export const productModel = mongoose.model("product",productSchema)

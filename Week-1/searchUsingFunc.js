@@ -1,4 +1,5 @@
 //7(searching element in array using function)
+
 function searchFromArray(array,s)
 {
     for(let b=0;b<array.length;b++){

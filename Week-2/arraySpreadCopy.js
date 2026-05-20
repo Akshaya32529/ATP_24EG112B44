@@ -4,6 +4,7 @@
 let fruits = ["apple", "banana"];
 let fruitsCopy = [...fruits, "orange"];
 
+
 console.log("Original Fruits:", fruits);
 console.log("Copied Fruits:", fruitsCopy);
 

@@ -13,6 +13,7 @@ const cartSchema= new Schema({   //cart schema is a doc of 2 prop
         default:1
     }
 })
+
 //cretae User schema(username,pass,email,age) 
 //            //import Schema method from mongoose       //string -0 is js datatype & String is 
 const userSchema=new Schema({

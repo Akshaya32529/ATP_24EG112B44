@@ -79,7 +79,6 @@ Content-Type: application/json
     "brand":"mottorola"
 }
 
-
 ### Updates a User (Id should be same so that we can update the existing data)
 PUT http://localhost:4000/product-api/products/1
 Content-Type: application/json

@@ -41,7 +41,6 @@ connectDB();
 // error handling middleware (nrml middleware contains 3 parameters but ,middleware will also take the err as parameter which is called error handling middleware)
 
 
-
 /*app.use((err,req,res,next)=>{
     res.status().json({message:"error occured",error:err.message})
 })*/ //it is for sample but for actual application we use redefined one

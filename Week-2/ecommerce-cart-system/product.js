@@ -12,6 +12,7 @@ export function getProductById(id) {
   return products.find(p => p.id === id);
 }
 
+
 // Return the full product list.
 export function getAllProducts() {
   return products;

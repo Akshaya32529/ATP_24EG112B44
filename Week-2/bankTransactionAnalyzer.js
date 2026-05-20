@@ -36,6 +36,7 @@ const firstDebitTransaction = transactions.find(
 );
 console.log("First Debit Transaction:", firstDebitTransaction);
 
+
 // Find the position of the transaction whose amount is 10000.
 const highValueTransactionIndex = transactions.findIndex(
   transaction => transaction.amount === 10000

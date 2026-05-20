@@ -47,6 +47,7 @@ myLibrary[1].borrow();
 console.log(`Book: ${myLibrary[0].title} | Available: ${myLibrary[0].isAvailable}`);
 console.log(`Book: ${myLibrary[1].title} | Available: ${myLibrary[1].isAvailable}`);
 
+
 // Return one book and show the new status.
 myLibrary[0].returnBook();
 console.log(`Book: ${myLibrary[0].title} | Available: ${myLibrary[0].isAvailable}`);

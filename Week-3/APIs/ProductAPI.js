@@ -59,7 +59,6 @@ productApp.post("/products",async(req,res)=>{
  });
 
 
-
  productApp.delete("/products/:id", async (req, res) => {
     const id = req.params.id;
     let deletedProduct=await productModel.findByIdAndDelete(id);

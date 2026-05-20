@@ -14,6 +14,7 @@ import {
 
 import { processPayment } from './payment.js';
 console.log('=== E-Commerce Store ===\n');
+
 // 1. Browse products
 console.log('All Products:');
 console.log(getAllProducts());

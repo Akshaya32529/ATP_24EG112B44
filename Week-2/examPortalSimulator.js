@@ -1,7 +1,7 @@
 // Exam Portal Simulator
 // Uses setTimeout() to show delayed steps after an exam is submitted.
 
-console.log("Exam submitted successfully");
+console.log("Exam  submitted successfully");
 
 setTimeout(() => {
   console.log("Evaluating answers...");

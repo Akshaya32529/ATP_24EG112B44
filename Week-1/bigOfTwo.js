@@ -9,6 +9,5 @@ if(a>b){
 
 
 
-
 //another way(using ternary operator)
 console.log(a>b?"a is big number":"b is big number")

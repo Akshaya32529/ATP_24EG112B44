@@ -9,6 +9,7 @@ export function validateTitle(title) {
   return { valid: true };
 }
 
+
 // Validate priority
 export function validatePriority(priority) {
   const allowed = ["low", "medium", "high"];

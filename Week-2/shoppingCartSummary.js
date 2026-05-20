@@ -44,6 +44,7 @@ console.log('Grand total cart value:', grandTotal);
 const mouseDetails = cart.find(item => item.name === "Mouse");
 console.log('Details of Mouse:', mouseDetails);
 
+
 // 5. Find the position of the product named "Keyboard"
 const keyboardIndex = cart.findIndex(item => item.name === "Keyboard");
 console.log('Index of Keyboard:', keyboardIndex);

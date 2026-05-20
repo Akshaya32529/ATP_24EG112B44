@@ -18,5 +18,5 @@ userCopy.name = "Aksh";
 // Changing a nested property affects both objects because preferences is shared.
 userCopy.preferences.theme = "black";
 
-console.log("Original User:", user);
+console.log("Original  User:", user);
 console.log("Shallow Copy:", userCopy);

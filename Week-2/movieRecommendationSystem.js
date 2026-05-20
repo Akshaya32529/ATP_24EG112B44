@@ -10,6 +10,7 @@ const movies = [
   { id: 4, title: "Interstellar", genre: "Sci-Fi", rating: 8.6 }
 ];
 
+
 Tasks:
   1. filter() only "Sci-Fi" movies
   2. map() to return strings like "Inception (8.8)"

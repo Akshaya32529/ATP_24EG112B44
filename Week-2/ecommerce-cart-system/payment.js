@@ -40,6 +40,7 @@ export function processPayment(method, couponCode = null) {
   // Clear the cart once the order is completed.
   clearCart();
 
+  
   return {
     orderId: generateOrderId(),
     items,

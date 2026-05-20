@@ -11,6 +11,7 @@ Tasks:
   5. findIndex() of "node"
 */
 
+
 const courses = ["javascript", "react", "node", "mongodb", "express"];
 
 // 1. Filter courses whose name length is greater than 5

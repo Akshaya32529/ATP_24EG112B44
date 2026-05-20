@@ -68,6 +68,7 @@ export function getCartTotal() {
   }, 0);
 }
 
+
 // Empty the cart after checkout.
 export function clearCart() {
   cartItems = [];

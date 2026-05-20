@@ -37,6 +37,7 @@ console.log('Highest mark:', highestMark);
 const firstFailingMark = marks.find(mark => mark < 40);
 console.log('First failing mark:', firstFailingMark);
 
+
 // 5. Find the array index of the mark equal to 92
 const index= marks.findIndex(mark => mark === 92);
 console.log('Index of mark 92:', index);

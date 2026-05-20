@@ -10,6 +10,7 @@ userApp.get('/users',(req,res)=>{
     res.json({message:"all users",payload:users})
 })
 
+
 //read user by id
 userApp.get('/users/:id',(req,res)=>{
     let idOfUrl=Number(req.params.id)

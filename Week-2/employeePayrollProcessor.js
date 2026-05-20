@@ -10,6 +10,7 @@ const employees = [
   { id: 204, name: "Pooja", salary: 30000, department: "Sales" }
 ];
 
+
 Tasks:
   1. filter() employees from IT department
   2. map() to add netSalary = salary + 10% bonus

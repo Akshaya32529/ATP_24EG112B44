@@ -11,7 +11,6 @@ if(a>b && a>c){
 }
 
 
-
 //another way(using ternary operator)
 let d = 10;
 let e = 25;

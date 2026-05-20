@@ -5,6 +5,7 @@ const coupons = {
   'ELECTRONICS20': { type: 'percentage', value: 20, minAmount: 10000, category: 'electronics' }
 };
 
+
 // Validate whether a coupon can be applied to the current cart.
 export function validateCoupon(code, cartTotal, cartItems) {
 

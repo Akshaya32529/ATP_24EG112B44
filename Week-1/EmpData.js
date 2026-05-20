@@ -26,6 +26,7 @@ const employess=[
         marks:[90,85,87],
     },
 ];
+
 //1 insert new employee at 2nd position
 employess.splice(2,0,{
     eno:105,

@@ -6,6 +6,7 @@ let user = {
   city: "Hyderabad"
 };
 
+
 let updatedUser = { ...user, age: 25 };
 
 console.log("Original User:", user);

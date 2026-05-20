@@ -1,4 +1,5 @@
 //6(sum of array elements using function)
+
 let a=function(array){
     let sum=0;
     for(let b=0;b<array.length;b++){

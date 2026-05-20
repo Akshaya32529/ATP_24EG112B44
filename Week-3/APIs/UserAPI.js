@@ -88,7 +88,6 @@ userApp.put("/users/:id",verifyToken,async(req,res)=>{
   res.status(200).json({message:"user deleted",payload:deletedUser})
  })
 
-
  //user login
  userApp.post("/auth",async(req,res)=>{
   //get user cred obj from client
